@@ -11,6 +11,11 @@ function App() {
     });
     return words;
   }
+  // list of possible state variables
+  /**
+   * Words
+   * Score
+   */
   return (
     <div className="App">
       <div className="container">
