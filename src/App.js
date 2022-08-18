@@ -27,26 +27,33 @@ export default class App extends Component {
   }
 
   updateWords = () => {
+    console.log(this.state);
+    console.log('Update new words');
+    
     this.setState({
-      words: this.getWords
-    })
+      words: this.getWords(),
+      currentIndex: 0
+    });
+    console.log(this.state);
   }
 
   nextWord = () => {
-    if (this.state.currentIndex <= 15) {
-      this.setState(
-        {
-          currentIndex: this.state.currentIndex + 1
-        }
-      )
-    } else {
+    if (this.state.currentIndex === 14) {
       this.updateWords();
-      this.setState(
-        {
-          currentIndex: 0
-        }
-      )
+      console.log(this.state);
     }
+    let words = this.state.words;
+    let currentIndex = this.state.currentIndex + 1;
+
+    if(this.state.currentIndex !== 14 && words[this.state.currentIndex])
+      words[currentIndex].status = -1;
+    this.setState(
+      {
+        currentIndex: currentIndex,
+        words: words
+      }
+    )
+    console.log('after next word:',this.state);
   }
   handleUserInput = (event) => {
     const userInput = event.target.value.trim();
@@ -67,8 +74,8 @@ export default class App extends Component {
           words: wordsFromState
         });
         console.log(this.state);
-        this.nextWord();
       }
+      this.nextWord();
       event.target.value = '';
     }
     this.setState({ value: event.target.value });
@@ -94,6 +101,10 @@ export default class App extends Component {
     )
   }
 }
+// -2 
+// -1 current word
+// 0 wrong word
+// 1 correct word
 
 class Word {
   constructor(word, status) {

@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 
 export default class Card extends Component {
+    getWordStatusClass = (statusIn) => {
+        return statusIn === 1 ? '' : 
+        statusIn === 0 ? 'text-danger':
+        statusIn === -1 ? 'text-white bg-dark' :'text-secondary'
+    }
     render() {
         return (
             <div className="card">
                 <div className="card-header d-flex flex-row flex-wrap">
                     {this.props.words.map((wordObj) => {
-                        return <h3 className="px-2" key={wordObj.word}>{wordObj.word + ' ' + wordObj.status}</h3>;
+                        return <h3 className={`px-2 ${this.getWordStatusClass(wordObj.status)}`} key={wordObj.word}>{wordObj.word}</h3>;
                     })}
                 </div>
                 <div className="card-body text-center">
