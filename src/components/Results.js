@@ -4,7 +4,8 @@ export default class Results extends Component {
   render() {
     return (
         <div className="alert alert-primary mt-3" role="alert">
-            Score:{this.props.score}
+            Score:{this.props.score},
+            Errors:{this.props.errors}
         </div>
     )
   }
