@@ -5,6 +5,13 @@ import Card from './components/Card';
 import randomWords from 'random-words';
 import Results from './components/Results';
 
+class Word {
+  constructor(word, status) {
+    this.word = word;
+    this.status = status;
+  }
+}
+
 export default class App extends Component {
   constructor() {
     super();
@@ -14,7 +21,46 @@ export default class App extends Component {
       currentUserInput: '',
       score: 0,
       errors: 0,
+      timer: '1:00',
     };
+  }
+  
+  gameStatus = false;
+  timer = () => {
+    if (!this.gameStatus)
+      this.gameStatus = !this.gameStatus;
+    else
+      return;
+    let secs = 60;
+    let mins = 0;
+    const timerInterval = setInterval(() => {
+      if (secs === 0) {
+        if (mins === 0) {
+          clearInterval(timerInterval);
+          return;
+        } else {
+          mins = mins - 1;
+          secs = 60;
+        }
+      }
+      secs = secs - 1;
+      this.setState({
+        timer: mins + ":" + secs
+      });
+      if (secs === 0) {
+        alert(`Score:${this.state.score}, Errors:${this.state.errors}`);
+        this.setState(
+          {
+            currentIndex: 0,
+            words: this.getWords(),
+            timer: '1:00',
+            score: 0,
+            errors: 0
+          });
+          this.gameStatus = false;
+          document.querySelector('#words-input').value = '';
+      }
+    }, 1000);
   }
 
   getWords = () => {
@@ -42,16 +88,15 @@ export default class App extends Component {
       {
         currentIndex: currentIndex,
         words: words
-      }, () => {
-        console.log('after next word:', this.state);
       }
     )
   }
+
   handleUserInput = (event) => {
     const userInput = event.target.value.trim();
     let wordsFromState = this.state.words;
     let expectedWord = wordsFromState[this.state.currentIndex];
-    if (userInput.length === expectedWord.word.length) {      
+    if (userInput.length === expectedWord.word.length) {
       let score = this.state.score;
       let errors = this.state.errors;
       if (userInput === expectedWord.word) {
@@ -79,9 +124,9 @@ export default class App extends Component {
           <div className="row">
             <div className="col-12">
               <div className="mt-4">
-                <Card words={this.state.words} inputHandler={this.handleUserInput} timer={1}>
+                <Card words={this.state.words} inputHandler={this.handleUserInput} timer={this.state.timer} onKeyPress={this.timer}>
                 </Card>
-                <Results score={this.state.score} errors={this.state.errors}/>
+                <Results score={this.state.score} errors={this.state.errors} />
               </div>
             </div>
           </div>
@@ -90,16 +135,5 @@ export default class App extends Component {
         </div>
       </div>
     )
-  }
-}
-// -2 
-// -1 current word
-// 0 wrong word
-// 1 correct word
-
-class Word {
-  constructor(word, status) {
-    this.word = word;
-    this.status = status;
   }
 }

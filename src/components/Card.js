@@ -7,24 +7,6 @@ export default class Card extends Component {
         statusIn === -1 ? 'text-white bg-dark' :'text-secondary'
     }
 
-    timer = () => {
-        let secs = 0;
-        let mins = this.props.timer;
-        const timerInterval = setInterval(()=> { 
-	        if (secs == 0 ) {
-                if (mins == 0) {
-                    clearInterval(timerInterval);
-                    return;
-                } else {
-                    mins = mins -1; 
-                    secs = 60;    
-                }
-	        }
-	        secs = secs - 1; 
-            document.getElementsByClassName('input-group-text')[0].textContent = mins + ":" + secs;
-        }, 1000);
-    }
-
     render() {
         return (
             <div className="card">
@@ -37,7 +19,7 @@ export default class Card extends Component {
                     <div className="card-title"></div>
                     <div className="card-text">
                         <div className="input-group mb-3">
-                            <input type="text" className="form-control form-control-lg" onKeyPress={this.timer} placeholder="Start typing here...." onChange={this.props.inputHandler} />
+                            <input id="words-input" type="text" className="form-control form-control-lg" onKeyPress={this.props.onKeyPress} placeholder="Start typing here...." onChange={this.props.inputHandler} />
                             <span className="input-group-text">{this.props.timer}</span>
                             <button className="btn btn-primary" type="button">Reset</button>
                         </div>
