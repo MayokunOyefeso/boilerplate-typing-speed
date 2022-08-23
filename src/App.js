@@ -13,7 +13,11 @@ class Word {
 }
 
 export default class App extends Component {
+  gameStatus = false;
+  NUM_OF_WORDS = 30 ;
   constructor() {
+    // why we use super()
+    // https://stackoverflow.com/questions/40433463/what-does-calling-super-in-a-react-constructor-do   
     super();
     this.state = {
       words: this.getWords(),
@@ -25,7 +29,9 @@ export default class App extends Component {
     };
   }
   
-  gameStatus = false;
+  /**
+   * Starts timer when the game starts and updates time left every second
+   */
   timer = () => {
     if (!this.gameStatus)
       this.gameStatus = !this.gameStatus;
@@ -63,9 +69,12 @@ export default class App extends Component {
     }, 1000);
   }
 
+  /**
+   * @returns array of @Word objects
+   */
   getWords = () => {
     let words = [];
-    randomWords(15).map((word) => {
+    randomWords(this.NUM_OF_WORDS).map((word) => {
       return words.push(new Word(word, -2));
     });
     if (words.length)
@@ -73,10 +82,14 @@ export default class App extends Component {
     return words;
   }
 
+  /**
+   * Moves to next word.
+   * Updates words with new words if current index is at the end of array
+   */
   nextWord = () => {
     let words = this.state.words;
     let currentIndex = 0;
-    if (this.state.currentIndex === 14)
+    if (this.state.currentIndex === this.NUM_OF_WORDS - 1)
       words = this.getWords();
     else {
       currentIndex = this.state.currentIndex + 1;
@@ -92,6 +105,11 @@ export default class App extends Component {
     )
   }
 
+  /**
+   * Validates current user input and handles score updates.
+   * Calls next word when current word is done
+   * @param {*} event 
+   */
   handleUserInput = (event) => {
     const userInput = event.target.value.trim();
     let wordsFromState = this.state.words;
