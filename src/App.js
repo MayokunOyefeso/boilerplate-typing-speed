@@ -79,7 +79,7 @@ export default class App extends Component {
           <div className="row">
             <div className="col-12">
               <div className="mt-4">
-                <Card words={this.state.words} inputHandler={this.handleUserInput} timer="1:00">
+                <Card words={this.state.words} inputHandler={this.handleUserInput} timer={1}>
                 </Card>
                 <Results score={this.state.score} errors={this.state.errors}/>
               </div>
